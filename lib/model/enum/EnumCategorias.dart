@@ -6,12 +6,15 @@ import 'package:urna_eletrnonica/model/categorias/Livros.dart';
 import 'package:urna_eletrnonica/model/categorias/Musicas.dart';
 import 'package:urna_eletrnonica/model/categorias/Series.dart';
 
+import '../categorias/Outros.dart';
+
 enum EnumCategorias {
   LIVROS,
   FILMES,
   MUSICAS,
   JOGOS,
   SERIES,
+  OUTROS,
   ALL,
 }
 
@@ -33,6 +36,9 @@ class CategoriasHelper {
       case EnumCategorias.SERIES:
         return Series().candidatos;
 
+      case EnumCategorias.OUTROS:
+        return Outros().candidatos;
+
       case EnumCategorias.ALL:
         List<Candidato> candidatos = [];
         candidatos.addAll(Series().candidatos);
@@ -40,6 +46,7 @@ class CategoriasHelper {
         candidatos.addAll(Jogos().candidatos);
         candidatos.addAll(Musicas().candidatos);
         candidatos.addAll(Filmes().candidatos);
+        candidatos.addAll(Outros().candidatos);
 
         return candidatos;
       default:

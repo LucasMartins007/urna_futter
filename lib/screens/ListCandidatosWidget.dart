@@ -1,18 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:line_icons/line_icon.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:urna_eletrnonica/model/candidatos.dart';
-import 'package:urna_eletrnonica/model/categorias/Filmes.dart';
 import 'package:urna_eletrnonica/model/enum/EnumCategorias.dart';
-import 'package:urna_eletrnonica/model/repository/DBProvider.dart';
 import 'package:urna_eletrnonica/services/CandidatosService.dart';
 import 'package:urna_eletrnonica/widget/CardCandidatoWidget.dart';
-import 'package:urna_eletrnonica/widget/CategoriasWidget.dart';
-import 'package:urna_eletrnonica/widget/DrawerWidget.dart';
+import 'package:urna_eletrnonica/widget/DialogWidget.dart';
 
 class ListCandidatosWidget extends StatefulWidget {
   final EnumCategorias categoria;
@@ -65,41 +57,43 @@ class _HomeScreenState extends State<ListCandidatosWidget>
           ),
         ),
       ),
-      body: FutureBuilder(
-        initialData: CategoriasHelper().getValue(widget.categoria),
-        future: buscarCandidatos(),
-        builder: (context, AsyncSnapshot<List<Candidato>> snapshot) {
-          if (snapshot.hasData) {
-            List<Candidato> candidatos = snapshot.data!;
-            return ListView.builder(
-              itemCount: candidatos.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  child: Container(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: Column(
-                      children: [
-                        CardCandidatoWidget(
-                          nome: candidatos[index].nome,
-                          numero: candidatos[index].numero,
-                          autor: candidatos[index].autor,
-                          qtdeVotos: candidatos[index].qtdeVotos,
-                          urlImage: "images/logo.png",
-                        ),
-                      ],
+      body: Container(
+        padding: EdgeInsets.only(top: 10),
+        child: FutureBuilder(
+          initialData: CategoriasHelper().getValue(widget.categoria),
+          future: buscarCandidatos(),
+          builder: (context, AsyncSnapshot<List<Candidato>> snapshot) {
+            if (snapshot.hasData) {
+              List<Candidato> candidatos = snapshot.data!;
+              return ListView.builder(
+                itemCount: candidatos.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      child: Column(
+                        children: [
+                          CardCandidatoWidget(
+                            nome: candidatos[index].nome,
+                            numero: candidatos[index].numero,
+                            autor: candidatos[index].autor,
+                            qtdeVotos: candidatos[index].qtdeVotos,
+                            urlImage: candidatos[index].imagem,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+                  );
+                },
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
       ),
-      drawer: DrawerWidget(),
       bottomNavigationBar: Container(
         height: 60,
         child: Row(
@@ -112,7 +106,10 @@ class _HomeScreenState extends State<ListCandidatosWidget>
               child: Container(
                 alignment: Alignment.center,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    CandidatoService().adicionarVoto(0);
+                    DialogWidget().ConfirmDialogWidget(context, "Branco");
+                  },
                   child: Text(
                     "Branco",
                     style: TextStyle(
@@ -131,7 +128,10 @@ class _HomeScreenState extends State<ListCandidatosWidget>
               child: Container(
                 alignment: Alignment.center,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    CandidatoService().adicionarVoto(1);
+                    DialogWidget().ConfirmDialogWidget(context, "Nulo");
+                  },
                   child: Text(
                     "Anular",
                     style: TextStyle(

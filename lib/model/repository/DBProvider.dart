@@ -17,6 +17,7 @@ class DBProvider {
           categoria TEXT,
           numero INTEGER,
           qtdeVotos INTEGER,
+          voted INTEGER,
           imagem string)""");
     });
   }
@@ -36,7 +37,24 @@ class DBProvider {
       "candidato",
       where: "categoria = ?",
       whereArgs: [categoria],
+      orderBy: "qtdeVotos desc"
     );
+
+    return List.generate(maps.length, (i) {
+      return Candidato.fromJson(maps[i]);
+    });
+  }
+
+  Future<List<Candidato>> findCandidatosVencedor(String categoria) async {
+    final db = await init();
+    List<Map<String, Object?>> maps = await db.rawQuery(
+        "SELECT nome, autor, numero, imagem, categoria, MAX(qtdeVotos) as qtdeVotos "
+            "from candidato "
+            " where categoria = ? "
+            " group by nome, autor, numero, imagem "
+            " order by qtdeVotos desc "
+        ,
+        [categoria]);
 
     return List.generate(maps.length, (i) {
       return Candidato.fromJson(maps[i]);
@@ -47,8 +65,9 @@ class DBProvider {
     final db = await init();
     List<Map<String, Object?>> maps = await db.query(
       "candidato",
-      where: "numero = ?",
+      where: "numero = ? ",
       whereArgs: [numero],
+      orderBy: "qtdeVotos"
     );
 
     return List.generate(maps.length, (i) {
@@ -58,7 +77,7 @@ class DBProvider {
 
   Future<List<Candidato>> findCandidatos() async {
     final db = await init();
-    List<Map<String, Object?>> maps = await db.query("candidato");
+    List<Map<String, Object?>> maps = await db.query("candidato", orderBy: "qtdeVotos");
 
     return List.generate(maps.length, (i) {
       return Candidato.fromJson(maps[i]);

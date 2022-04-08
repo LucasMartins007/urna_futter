@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:urna_eletrnonica/ResultadosScreen.dart';
+import 'package:urna_eletrnonica/screens/ResultadosScreen.dart';
 import 'package:urna_eletrnonica/model/enum/EnumCategorias.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:urna_eletrnonica/widget/CategoriasWidget.dart';
@@ -56,6 +56,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           subTitle: "Vote nos melhores filmes que vc já assistiu!",
           leadingIcon: Icon(Icons.ac_unit_outlined),
           categoria: EnumCategorias.FILMES,
+          candidatosVotados: [],
         ),
         CategoriasWidget(
           fontSite: 20,
@@ -63,6 +64,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           subTitle: "Vote nas melhores músicas que vc já ouviu!",
           leadingIcon: Icon(Icons.music_note_outlined),
           categoria: EnumCategorias.MUSICAS,
+          candidatosVotados: [],
         ),
         CategoriasWidget(
           fontSite: 20,
@@ -70,6 +72,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           subTitle: "Vote nos seus melhores jogos que você já jogou!",
           leadingIcon: Icon(Icons.games_rounded),
           categoria: EnumCategorias.JOGOS,
+          candidatosVotados: [],
         ),
         CategoriasWidget(
           leadingIcon: Icon(Icons.book_sharp),
@@ -77,6 +80,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           title: "Melhores Livros",
           subTitle: "Vote nos seus melhores livros que você já leu!",
           categoria: EnumCategorias.LIVROS,
+          candidatosVotados: [],
         ),
         CategoriasWidget(
           leadingIcon: Icon(Icons.move_to_inbox_outlined),
@@ -84,15 +88,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           title: "Melhores Séries",
           subTitle: "Vote nas melhors series que vc já assistiu!",
           categoria: EnumCategorias.SERIES,
+          candidatosVotados: [],
         ),
         Container(
           width: 50,
           height: 100,
           child: ElevatedButton.icon(
             onPressed: () {
-              Navigator.pushNamed(
+              Navigator.pushReplacement(
                 context,
-                "/resultado",
+                MaterialPageRoute(
+                  builder: (context) => ResultadosScreen(),
+                ),
               );
             },
             autofocus: true,

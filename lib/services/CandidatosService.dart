@@ -5,14 +5,6 @@ import 'package:urna_eletrnonica/model/repository/DBProvider.dart';
 class CandidatoService {
   Future<List<Candidato>> buscarCanditadosPorCategoria(
       EnumCategorias categoria) async {
-    if (EnumCategorias.ALL == categoria) {
-      saveAll(EnumCategorias.FILMES);
-      saveAll(EnumCategorias.JOGOS);
-      saveAll(EnumCategorias.LIVROS);
-      saveAll(EnumCategorias.MUSICAS);
-      saveAll(EnumCategorias.SERIES);
-      return DBProvider().findCandidatos();
-    }
     return await DBProvider().findCandidatosByCategoria(categoria.name);
   }
 
@@ -21,23 +13,17 @@ class CandidatoService {
   }
 
   void saveAll(EnumCategorias categoria) {
-    List<Candidato> candidatos = CategoriasHelper().getValue(categoria);
-
-    Future<List<Candidato>> futureCandidatos =
-        buscarCanditadosPorCategoria(categoria);
-
-    futureCandidatos.then((value) {
+    Future<List<Candidato>> future =
+        DBProvider().findCandidatosByCategoria(categoria.name);
+    future.then((value) {
       if (value.isEmpty) {
-        if (candidatos.length <= 5) {
-          candidatos.forEach((candidato) => DBProvider().addItem(candidato));
-        }
+        List<Candidato> candidatos = CategoriasHelper().getValue(EnumCategorias.ALL);
+
+        candidatos.forEach((element) {
+          DBProvider().addItem(element);
+        });
       }
     });
-  }
-
-  Future<List<Candidato>> resolverCandidatos(EnumCategorias categoria) {
-    this.saveAll(categoria);
-    return this.buscarCanditadosPorCategoria(categoria);
   }
 
   void adicionarVoto(int numeroCandidato) {
@@ -48,6 +34,7 @@ class CandidatoService {
     candidatos.then((value) {
       Candidato candidato = value.first;
       candidato.qtdeVotos++;
+      candidato.voted = 1;
       DBProvider().updateCandidato(candidato.id!, candidato);
     });
   }

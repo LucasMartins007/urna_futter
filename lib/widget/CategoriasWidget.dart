@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:urna_eletrnonica/model/enum/EnumCategorias.dart';
 import 'package:urna_eletrnonica/services/CandidatosService.dart';
-import 'package:urna_eletrnonica/widget/ListCandidatosWidget.dart';
+import 'package:urna_eletrnonica/screens/ListCandidatosWidget.dart';
 
 class CategoriasWidget extends StatefulWidget {
   final String title;
@@ -10,6 +10,7 @@ class CategoriasWidget extends StatefulWidget {
   final double fontSite;
   final Icon leadingIcon;
   final EnumCategorias categoria;
+  final List<String> candidatosVotados;
 
   const CategoriasWidget(
       {Key? key,
@@ -17,7 +18,8 @@ class CategoriasWidget extends StatefulWidget {
       required this.title,
       required this.subTitle,
       required this.leadingIcon,
-      required this.categoria})
+      required this.categoria,
+      required this.candidatosVotados})
       : super(key: key);
 
   @override
@@ -37,8 +39,9 @@ class _CategoriasWidgetState extends State<CategoriasWidget> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    ListCandidatosWidget(categoria: widget.categoria)));
+                builder: (context) => ListCandidatosWidget(
+                      categoria: widget.categoria,
+                    )));
       },
       title: Text(
         widget.title,

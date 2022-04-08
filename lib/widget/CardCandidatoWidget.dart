@@ -3,6 +3,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:urna_eletrnonica/model/candidatos.dart';
 import 'package:urna_eletrnonica/model/repository/DBProvider.dart';
 import 'package:urna_eletrnonica/services/CandidatosService.dart';
+import 'package:urna_eletrnonica/widget/DialogWidget.dart';
 
 class CardCandidatoWidget extends StatefulWidget {
   final String nome;
@@ -11,14 +12,14 @@ class CardCandidatoWidget extends StatefulWidget {
   final String urlImage;
   final int qtdeVotos;
 
-  const CardCandidatoWidget(
-      {Key? key,
-      required this.nome,
-      required this.numero,
-      required this.autor,
-      required this.urlImage,
-      required this.qtdeVotos})
-      : super(key: key);
+  const CardCandidatoWidget({
+    Key? key,
+    required this.nome,
+    required this.numero,
+    required this.autor,
+    required this.urlImage,
+    required this.qtdeVotos,
+  }) : super(key: key);
 
   @override
   _CardCandidatoWidgetState createState() => _CardCandidatoWidgetState();
@@ -29,35 +30,14 @@ class _CardCandidatoWidgetState extends State<CardCandidatoWidget> {
 
   void _addVoto() {
     CandidatoService().adicionarVoto(widget.numero);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          actions: [
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(context, "/resultado");
-              },
-              autofocus: true,
-              icon: Icon(
-                LineIcons.userCheck,
-                color: Colors.white,
-              ),
-              label: Text("Finalizar"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-              ),
-            ),
-          ],
-          title: Text("Você votou em " + widget.nome + "!"),
-          titlePadding: EdgeInsets.all(30),
-        );
-      },
-    );
+
+    DialogWidget().ConfirmDialogWidget(context, widget.nome);
     setState(() {
       _qtdeVotos++;
     });
   }
+
+
 
   @override
   void initState() {
@@ -68,11 +48,6 @@ class _CardCandidatoWidgetState extends State<CardCandidatoWidget> {
     });
   }
 
-  String _resolverQtde() {
-    return _qtdeVotos == 0
-        ? widget.qtdeVotos.toString()
-        : '$_qtdeVotos'.toString();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,12 +67,12 @@ class _CardCandidatoWidgetState extends State<CardCandidatoWidget> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.only(left: 10, right: 10),
             child: Image.asset(
               widget.urlImage,
               fit: BoxFit.fill,
               width: 70,
-              height: 70,
+              height: 60,
             ),
           ),
           Container(
@@ -132,23 +107,6 @@ class _CardCandidatoWidgetState extends State<CardCandidatoWidget> {
                     ),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.only(
-                    left: 10,
-                    top: 10,
-                    bottom: 10,
-                  ),
-                  child: SizedBox(
-                    width: 120,
-                    child: Text(
-                      "Votos: " + _resolverQtde(),
-                      style: TextStyle(
-                          color: Colors.blue[300],
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -156,7 +114,7 @@ class _CardCandidatoWidgetState extends State<CardCandidatoWidget> {
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.only(
               left: MediaQuery.of(context).size.width / 10,
-              top: MediaQuery.of(context).size.height / 10,
+              top: MediaQuery.of(context).size.height / 12,
             ),
             child: Column(
               children: [

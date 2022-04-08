@@ -5,6 +5,7 @@ class Candidato {
   final int numero;
   int qtdeVotos;
   final String categoria;
+  int voted;
   final String imagem;
 
   Candidato({
@@ -13,6 +14,7 @@ class Candidato {
     required this.autor,
     required this.imagem,
     required this.numero,
+    required this.voted,
     required this.categoria,
     required this.qtdeVotos,
   });
@@ -23,6 +25,7 @@ class Candidato {
       "nome": nome,
       "autor": autor,
       "numero": numero,
+      "voted": voted,
       "categoria": categoria,
       "qtdeVotos": qtdeVotos,
       "imagem": imagem,
@@ -34,6 +37,7 @@ class Candidato {
       id: parsedJson['id'],
       nome: parsedJson['nome'],
       autor: parsedJson['autor'],
+      voted: parsedJson['voted'],
       numero: parsedJson['numero'],
       categoria: parsedJson['categoria'],
       qtdeVotos: parsedJson['qtdeVotos'],

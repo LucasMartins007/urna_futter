@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:urna_eletrnonica/model/enum/EnumCategorias.dart';
-import 'package:urna_eletrnonica/widget/ListCandidatosWidget.dart';
+import 'package:urna_eletrnonica/screens/ListCandidatosWidget.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
